@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Energy Forecast</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Smart Energy Consumption Forecasting</h2>
+        <form id="predict-form">
+            <label>Previous Hour Energy Usage (kW):</label>
+            <input type="number" step="0.01" name="prev_hour" required>
+            <button type="submit">Predict</button>
+        </form>
+        <h3 id="result"></h3>
+    </div>
+<script>
+document.getElementById('predict-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const response = await fetch('/predict', {
+        method: 'POST',
+        body: formData
+    });
+    const result = await response.json();
+    document.getElementById('result').innerText = result.prediction
+        ? `Predicted Energy Usage: ${result.prediction} kW`
+        : `Error: ${result.error}`;
+};
+</script>
+</body>
+</html>
